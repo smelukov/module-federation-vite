@@ -104,7 +104,8 @@ function wrapShare(id, shared) {
           requiredVersion: ${JSON.stringify(shareConfig.requiredVersion)}
         }}})
         // console.log("开始加载shared ${id}", res)
-        export ${command !== "build" ? "default" : "const dynamicExport = "} res()
+        export default res()?.default ? undefined : res()
+        ${command !== "build" ? "" : "export const dynamicExport = res()"}
       `,map: null,
       syntheticNamedExports: "dynamicExport"
       }
@@ -148,7 +149,9 @@ module.exports = function federation(
     )
   })
   const remotePrefixList = Object.keys(remotes)
-  const sharedKeyList = Object.keys(shared).map(item => `__overrideModule__${item}`)
+  // const sharedKeyList = Object.keys(shared).map(item => `__overrideModule__${item}`)
+  // @json2csv/plainjs --> .vite/deps/@json2csv_plainjs
+  const sharedKeyMatchList = Object.keys(shared).map(item => `__overrideModule__${item.replace("/", "_")}`)
   return [
     aliasToArrayPlugin,
     normalizeOptimizeDepsPlugin,
@@ -199,20 +202,20 @@ module.exports = function federation(
           // generate remoteEntry.js
           return generateRemoteEntry(options, command !== "build")
         }
-        let [devSharedModuleName] = id.match(new RegExp(`\.vite\/deps\/(${sharedKeyList.join("|")})(\_.*\.js|\.js)`)) || []
+        let [devSharedModuleName] = (sharedKeyMatchList.length && id.match(new RegExp(`\/(${sharedKeyMatchList.join("|")})(\_.*\.js|\.js)`))) || []
         if (devSharedModuleName) {
           // generate shared
-          return wrapShare(devSharedModuleName.replace(".vite/deps/__overrideModule__", "").replace(/_/g, "/").replace(".js", ""), shared)
+          return wrapShare(devSharedModuleName.replace("/__overrideModule__", "").replace(/_/g, "/").replace(".js", ""), shared)
         }
         let [prodSharedName] = id.match(/\_\_overrideModule\_\_=[^&]+/) || []
         if (prodSharedName) {
           // generate shared
           return wrapShare(decodeURIComponent(prodSharedName.replace("__overrideModule__=", "")), shared)
         }
-        let [devRemoteModuleName] = id.match(new RegExp(`\.vite\/deps\/(${remotePrefixList.join("|")})(\_.*\.js|\.js)`)) || []
+        let [devRemoteModuleName] = id.match(new RegExp(`\/(${remotePrefixList.join("|")})(\_.*\.js|\.js)`)) || []
         if (devRemoteModuleName) {
           // generate remote
-          return wrapRemote(devRemoteModuleName.replace(".vite/deps/", "").replace(/_/g, "/").replace(".js", ""))
+          return wrapRemote(devRemoteModuleName.replace("/", "").replace(/_/g, "/").replace(".js", ""))
         }
         let [prodRemoteName] =  id.match(/\_\_moduleRemote\_\_=[^&]+/) || []
         if (prodRemoteName) {

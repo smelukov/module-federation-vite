@@ -1,0 +1,97 @@
+{
+  "id": "examples_rust",
+  "name": "examples_rust",
+  "metaData": {
+    "name": "examples_rust",
+    "type": "app",
+    "buildInfo": {
+      "buildVersion": "1.0.0",
+      "buildName": "examples-rust"
+    },
+    "remoteEntry": {
+      "name": "static/js/examples_rust.a031aeeb.js",
+      "path": "",
+      "type": "global"
+    },
+    "types": {
+      "path": "",
+      "name": "",
+      "zip": "@mf-types.zip",
+      "api": "@mf-types.d.ts"
+    },
+    "globalName": "examples_rust",
+    "pluginVersion": "0.2.5",
+    "publicPath": "/"
+  },
+  "shared": [
+    {
+      "id": "examples_rust:react-dom",
+      "name": "react-dom",
+      "version": "18.3.1",
+      "singleton": true,
+      "requiredVersion": "^18.3.1",
+      "assets": {
+        "js": {
+          "async": [
+            "static/js/async/682.9eb0d1a8.js"
+          ],
+          "sync": [
+            "static/js/async/191.761326f9.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
+    },
+    {
+      "id": "examples_rust:react",
+      "name": "react",
+      "version": "18.3.1",
+      "singleton": true,
+      "requiredVersion": "^18.3.1",
+      "assets": {
+        "js": {
+          "async": [],
+          "sync": [
+            "static/js/async/682.9eb0d1a8.js"
+          ]
+        },
+        "css": {
+          "async": [],
+          "sync": []
+        }
+      }
+    }
+  ],
+  "remotes": [
+    {
+      "federationContainerName": "http://localhost:5173/dd/remoteEntry.js",
+      "moduleName": "App",
+      "alias": "viteRemote",
+      "entry": "*"
+    }
+  ],
+  "exposes": [
+    {
+      "id": "examples_rust:app",
+      "name": "app",
+      "assets": {
+        "js": {
+          "sync": [
+            "static/js/async/__federation_expose_app.a2266eda.js"
+          ],
+          "async": [
+            "static/js/async/682.9eb0d1a8.js"
+          ]
+        },
+        "css": {
+          "sync": [],
+          "async": []
+        }
+      },
+      "path": "./app"
+    }
+  ]
+}
